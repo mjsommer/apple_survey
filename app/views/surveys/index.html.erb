@@ -1,14 +1,44 @@
 <p style="color: green"><%= notice %></p>
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
 
 <h1>Surveys</h1>
 
 <div id="surveys">
-  <% @surveys.each do |survey| %>
-    <%= render survey %>
-    <p>
-      <%= link_to "Show this survey", survey %>
-    </p>
-  <% end %>
+  <table>
+    <tr>
+      <th>Question</th>
+      <th>Answer Count</th>
+      <th>Percent YES</th>
+      <th>Percnet NO</th>
+    </tr>
+    <% @surveys.each do |survey| %>
+      <tr>
+        <td><%= link_to survey.question, survey %></td>
+        <td><%= survey.answers.count() %></td>
+
+        <td><%= Answer.result_percentage(survey.id , true) %></td>
+        <td><%= Answer.result_percentage(survey.id , false) %></td>
+      </tr>
+    <% end %>
+  </table>
 </div>
 
-<%= link_to "New survey", new_survey_path %>
+<p>
+  <%= button_to "New survey", new_survey_path, :method => :get %>
+</p>

@@ -1,5 +1,5 @@
 <%= form_with(model: survey) do |form| %>
-  <% if survey.errors.any? %>
+  <% if !survey.nil? && survey.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(survey.errors.count, "error") %> prohibited this survey from being saved:</h2>
 

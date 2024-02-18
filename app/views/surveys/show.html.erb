@@ -1,10 +1,28 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @survey %>
+<table>
+  <tr>
+    <td><%= render @survey %></td>
+
+    <td><%= button_to "Yes",
+                      action: "create",
+                      controller: "answers",
+                      survey_id: @survey.id,
+                      response: true
+    %></td>
+
+    <td><%= button_to "No",
+                      action: "create",
+                      controller: "answers",
+                      survey_id: @survey.id,
+                      response: false
+    %></td>
+  </tr>
+</table>
 
 <div>
-  <%= link_to "Edit this survey", edit_survey_path(@survey) %> |
-  <%= link_to "Back to surveys", surveys_path %>
-
-  <%= button_to "Destroy this survey", @survey, method: :delete %>
+  <p>
+    <%= link_to "Back to surveys", surveys_path %>
+  </p>
 </div>
+

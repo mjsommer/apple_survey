@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: %i[ show edit update destroy ]
+  before_action :set_answer, only: %i[ show ]
 
   # GET /answers or /answers.json
   def index
@@ -10,22 +10,13 @@ class AnswersController < ApplicationController
   def show
   end
 
-  # GET /answers/new
-  def new
-    @answer = Answer.new
-  end
-
-  # GET /answers/1/edit
-  def edit
-  end
-
   # POST /answers or /answers.json
   def create
-    @answer = Answer.new(answer_params)
+    @answer = Answer.new(survey_id: params[:survey_id], response: params[:response])
 
     respond_to do |format|
       if @answer.save
-        format.html { redirect_to answer_url(@answer), notice: "Answer was successfully created." }
+        format.html { redirect_to root_url, notice: "Answer was successfully recorded." }
         format.json { render :show, status: :created, location: @answer }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -34,27 +25,10 @@ class AnswersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /answers/1 or /answers/1.json
-  def update
-    respond_to do |format|
-      if @answer.update(answer_params)
-        format.html { redirect_to answer_url(@answer), notice: "Answer was successfully updated." }
-        format.json { render :show, status: :ok, location: @answer }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /answers/1 or /answers/1.json
-  def destroy
-    @answer.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to answers_url, notice: "Answer was successfully destroyed." }
-      format.json { head :no_content }
-    end
+  def result_percentage(survey, answer)
+    total = survey.answers.count
+    count = survey.answers.where(response: answer).count
+    (count.to_f / total.to_f * 100).round(2)
   end
 
   private
@@ -65,6 +39,6 @@ class AnswersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def answer_params
-      params.require(:answer).permit(:response)
+      params.require(:answer).permit(:survey_id, :response)
     end
 end
