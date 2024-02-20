@@ -27,13 +27,12 @@
       <th>Percent YES</th>
       <th>Percnet NO</th>
     </tr>
-    <% @surveys.each do |survey| %>
+    <% @survey_stats.each do |survey_stat| %>
       <tr>
-        <td><%= link_to survey.question, survey %></td>
-        <td><%= survey.answers.count() %></td>
-
-        <td><%= Answer.result_percentage(survey.id , true) %></td>
-        <td><%= Answer.result_percentage(survey.id , false) %></td>
+        <td><%= link_to survey_stat[:question], survey_stat[:survey] %></td>
+        <td><%= survey_stat[:count] %></td>
+        <td><%= survey_stat[:yes] %></td>
+        <td><%= survey_stat[:no] %></td>
       </tr>
     <% end %>
   </table>

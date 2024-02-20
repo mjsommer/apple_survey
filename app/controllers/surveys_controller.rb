@@ -3,7 +3,24 @@ class SurveysController < ApplicationController
 
   # GET /surveys or /surveys.json
   def index
+    @survey_stats = []
     @surveys = Survey.all
+
+    @surveys.each_with_index do |survey, i|
+      stats = {}
+      stats[:survey] = survey
+      stats[:question] = survey.question
+      stats[:count] = survey.answers.count()
+      stats[:yes] = result_percentage(survey.id, 1)
+      stats[:no] = result_percentage(survey.id, 0)
+      @survey_stats << stats
+    end
+  end
+
+  def result_percentage(survey_id, response)
+    total = Answer.where(survey_id: survey_id).count()
+    count = Answer.where(survey_id: survey_id, response: response).count()
+    (count.to_f / total.to_f).round(2) * 100
   end
 
   # GET /surveys/1 or /surveys/1.json
