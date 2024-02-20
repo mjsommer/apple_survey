@@ -11,15 +11,15 @@ class SurveysController < ApplicationController
       stats[:survey] = survey
       stats[:question] = survey.question
       stats[:count] = survey.answers.count()
-      stats[:yes] = result_percentage(survey.id, 1)
-      stats[:no] = result_percentage(survey.id, 0)
+      stats[:yes] = result_percentage(survey, 1)
+      stats[:no] = result_percentage(survey, 0)
       @survey_stats << stats
     end
   end
 
-  def result_percentage(survey_id, response)
-    total = Answer.where(survey_id: survey_id).count()
-    count = Answer.where(survey_id: survey_id, response: response).count()
+  def result_percentage(survey, response)
+    total = survey.answers.count()
+    count = survey.answers.where(response: response).count()
     (count.to_f / total.to_f).round(2) * 100
   end
 
